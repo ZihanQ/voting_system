@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block title %}Poll Results{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2>{{ poll.title }} - Results</h2>
+        </div>
+        <div class="card-body">
+            <p>Total Votes: <strong>{{ total_votes }}</strong></p>
+            <ul class="list-group">
+                {% for result in results %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>{{ result.option_text }}</span>
+                        <span>{{ result.percentage | round(1) }}% ({{ result.vote_count }} votes)</span>
+                    </div>
+                    <div class="progress mt-2" style="height: 20px;">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             style="width: {{ result.percentage }}%;"
+                             aria-valuenow="{{ result.percentage }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            {{ result.percentage | round(1) }}%
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card-footer text-center">
+            <!-- 修改后的返回按钮 -->
+            <a href="{{ url_for('poll.get_poll_details', poll_id=poll.id) }}"
+               class="btn btn-outline-primary">
+                Back to This Poll
+            </a>
+            <a href="{{ url_for('poll.get_polls') }}"
+           class="btn btn-outline-secondary">
+            All Polls
+        </a>
+        </div>
+    {% if current_user and current_user.is_admin %}
+<div class="admin-actions mb-3">
+    <a href="{{ url_for('admin.toggle_poll', poll_id=poll.id) }}"
+       class="btn btn-sm {% if poll.is_disabled %}btn-warning{% else %}btn-danger{% endif %}">
+        {% if poll.is_disabled %}Enable{% else %}Disable{% endif %} Poll
+    </a>
+</div>
+{% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block title %}My Votes{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>My Voting History</h2>
+    <div class="list-group">
+        {% for entry in polls %}
+        <div class="list-group-item">
+            <h5>{{ entry.poll.title }}</h5>
+            <p>Your choice: {{ entry.voted_option }}</p>
+            <small>End Time: {{ entry.poll.end_time.strftime('%Y-%m-%d %H:%M') }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

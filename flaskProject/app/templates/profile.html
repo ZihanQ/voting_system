@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2>Profile</h2>
+        </div>
+        <div class="card-body">
+            <form id="profileForm" action="/user/profile" method="POST">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="avatar_url" class="form-label">Avatar URL:</label>
+                    <input type="text" class="form-control" id="avatar_url" name="avatar_url" value="{{ user.avatar_url }}">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('profileForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // 阻止默认表单提交
+        const formData = new FormData(this);
+        const response = await fetch(this.action, {
+            method: 'POST',
+            body: formData,
+        });
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message); // 弹窗提示
+            window.location.href = "/dashboard"; // 跳转到 dashboard 页面
+        } else {
+            alert(result.message || "Something went wrong!");
+        }
+    });
+</script>
+{% endblock %}

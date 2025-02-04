@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Admin Dashboard</h2>
+    
+    <!-- 统计卡片 -->
+    <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+        <div class="col">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text display-4">{{ stats.total_users }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- 其他统计卡片类似 -->
+    </div>
+
+    <!-- 快速导航 -->
+    <div class="row g-3">
+        <div class="col-md-3">
+            <a href="{{ url_for('admin.manage_polls') }}" class="btn btn-secondary w-100">
+                Manage Polls
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ url_for('admin.manage_users') }}" class="btn btn-secondary w-100">
+                Manage Users
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

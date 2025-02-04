@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Poll System{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">Poll System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">  <!-- 新增 me-auto 让左侧链接左对齐 -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/poll/">Polls_list</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/poll/create">Create Poll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('poll.my_votes') }}">My Votes</a>
+                </li>
+            </ul>
+
+
+            <!-- 新增右侧导航部分 -->
+            <ul class="navbar-nav ms-auto">
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                <li class="nav-item">
+                    <a class="nav-link text-warning" href="{{ url_for('admin.dashboard') }}">
+                        <i class="bi bi-shield-lock"></i> Admin Panel
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="btn btn-danger btn-sm"
+                       href="{{ url_for('user.logout') }}"
+                       style="padding: 0.25rem 0.75rem;">  <!-- 自定义按钮尺寸 -->
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container">
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Main content -->
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js">
+// Token过期全局检测
+document.addEventListener('DOMContentLoaded', function() {
+    // 处理自动跳转提示
+    const expiredAlertCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('auto_show_expired_alert='));
+
+    if (expiredAlertCookie) {
+        // 显示弹窗
+        alert('登录状态已过期，请重新登录');
+        // 清理cookie
+        document.cookie = 'auto_show_expired_alert=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        // 跳转首页
+        window.location.href = "{{ url_for('user.login') }}";
+    }
+
+    // 处理页面内容中的过期消息
+    const checkTokenExpired = () => {
+        const content = document.documentElement.innerHTML;
+        if(content.includes('"msg":"Token has expired"')) {
+            alert('登录状态已过期，即将跳转到登录页面');
+            document.cookie = 'access_token_cookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            window.location.href = "{{ url_for('user.login') }}";
+        }
+    };
+
+    // 立即检查
+    checkTokenExpired();
+
+    // 每10秒检查一次
+    setInterval(checkTokenExpired, 10000);
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block title %}Poll Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ poll.title }}</h2>
+    <p>{{ poll.description }}</p>
+    <p><strong>Start Time:</strong> {{ poll.start_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <p><strong>End Time:</strong> {{ poll.end_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+    {% if poll.end_time < now %}
+        <div class="alert alert-info">
+            <h4>Voting has ended. Final Results:</h4>
+            {% with results=poll.calculate_results() %}
+                <p>Total Votes: {{ results.total_votes }}</p>
+                <ul class="list-group">
+                    {% for option in results.options %}
+                    <li class="list-group-item">
+                        {{ option.option_text }} - {{ option.vote_count }} votes
+                        <div class="progress mt-2" style="height: 20px;">
+                            <div class="progress-bar bg-success"
+                                 style="width: {{ option.percentage }}%;"
+                                 aria-valuenow="{{ option.percentage }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                {{ option.percentage|round(1) }}%
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% endwith %}
+        </div>
+    {% else %}
+        <form method="POST" action="{{ url_for('poll.vote_on_poll', poll_id=poll.id) }}">
+            {% for option in result.options %}
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="radio"
+                       name="selected_option"
+                       value="{{ option.id | string }}"
+                       id="option{{ option.id }}"
+                       required>
+                <label class="form-check-label" for="option{{ option.id }}">
+                    {{ option.text }}
+                </label>
+            </div>
+            {% endfor %}
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">投票</button>
+                <a href="{{ url_for('poll.poll_results', poll_id=poll.id) }}"
+                   class="btn btn-info ms-2">
+                    查看当前结果
+                </a>
+            </div>
+        </form>
+    {% endif %}
+
+    <!-- 新增：统一返回按钮（始终显示） -->
+    <div class="mt-4 text-center">
+        <a href="{{ url_for('poll.get_polls') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> 返回投票列表
+        </a>
+    </div>
+</div>
+
+<!-- Flash消息处理保持不变 -->
+{% if get_flashed_messages() %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+        const alert = document.createElement('div');
+        alert.className = `alert alert-{{ category }} alert-dismissible fade show`;
+        alert.innerHTML = `
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.querySelector('.container').prepend(alert);
+        {% endfor %}
+    });
+</script>
+{% endif %}
+{% endblock %}

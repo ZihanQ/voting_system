@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="text-center mb-4">
+        <h1>Welcome, {{ username }}!</h1>
+        <p class="lead">Your email: {{ email }}</p>
+    </header>
+
+    <section class="mb-5">
+        <h2>Your Polls</h2>
+        {% if polls %}
+            <div class="list-group">
+                {% for poll in polls %}
+                    <a href="/poll/{{ poll.id }}" class="list-group-item list-group-item-action">
+                        <h5 class="mb-1">{{ poll.title }}</h5>
+                        <p class="mb-1">Start: {{ poll.start_time }} | End: {{ poll.end_time }}</p>
+                        <small>Active: {{ 'Yes' if poll.is_active else 'No' }}</small>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">You have not created any polls yet.</p>
+        {% endif %}
+    </section>
+
+    <section class="mb-5">
+        <h2>Actions</h2>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="/poll" class="btn btn-primary w-100">Poll</a>
+            </li>
+            <li class="list-group-item">
+                <a href="/user/profile" class="btn btn-secondary w-100">View/Edit Profile</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ url_for('user.logout') }}" class="btn btn-danger w-100">Logout</a>
+            </li>
+        </ul>
+    </section>
+</div>
+
+{% endblock %}

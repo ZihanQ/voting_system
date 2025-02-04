@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <h2 class="display-4 mb-4">Welcome to the Voting System</h2>
+    <p class="lead mb-4">Please register or log in to participate in polls!</p>
+
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-lg">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Register</h5>
+                    <p class="card-text">Create an account to start voting and creating polls.</p>
+                    <a href="/register" class="btn btn-primary">Register Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-lg">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Login</h5>
+                    <p class="card-text">Already have an account? Log in to your profile.</p>
+                    <a href="/login" class="btn btn-success">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

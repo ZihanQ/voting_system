@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Login</h2>
+    <form action="/login" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+            <div class="invalid-feedback">Please enter your username.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+            <div class="invalid-feedback">Please enter your password.</div>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Login</button>
+    </form>
+</div>
+    <script>
+// 检查是否显示过期提示
+document.addEventListener('DOMContentLoaded', function() {
+    {% if request.cookies.get('auto_show_expired_alert') %}
+        alert("会话已过期，请重新登录");
+        // 清除提示cookie
+        document.cookie = 'auto_show_expired_alert=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        // 跳转首页
+        window.location.href = "{{ url_for('main.index') }}";
+    {% endif %}
+});
+</script>
+{% endblock %}
