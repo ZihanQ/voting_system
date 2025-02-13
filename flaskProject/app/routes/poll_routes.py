@@ -146,6 +146,10 @@ def vote_on_poll(poll_id):
     if not poll:
         flash("Poll not found.", "error")
         return redirect(url_for('poll.get_polls'))
+    #如果投票被禁用
+    if poll.is_disabled:
+        flash("该投票已被管理员禁用", "danger")
+        return redirect(url_for('poll.get_polls'))
 
     selected_option = request.form.get('selected_option')
     print(f"Selected option type: {type(selected_option)}, value: {selected_option}")
@@ -174,12 +178,18 @@ def vote_on_poll(poll_id):
 
         # 投票保存逻辑
     new_vote = Vote(
-        user_id=user_id,
+        user_id=None if poll.is_anonymous else user_id,  # 匿名投票不记录用户
         poll_id=poll_id,
         option_id=option.id
     )
     db.session.add(new_vote)
     db.session.commit()
+    # 匿名投票的特殊提示
+    if poll.is_anonymous:
+        flash("匿名投票已提交，您的选择不会被关联到个人账户", "success")
+    else:
+        flash("Vote submitted successfully!", "success")
+
     # 修改重复投票检查逻辑
     if not poll.is_anonymous:
         existing_vote = Vote.query.filter_by(user_id=user_id, poll_id=poll_id).first()
@@ -215,7 +225,7 @@ def poll_results(poll_id):
             poll_id=poll_id
         ).first() is not None
 
-        if not has_voted:
+        if not has_voted and not poll.is_anonymous:
             flash("You can only view polls you've participated in", "danger")
             return redirect(url_for('poll.get_polls'))
 

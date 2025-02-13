@@ -4,33 +4,154 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Admin Dashboard</h2>
-    
+    <!-- 标题和欢迎信息 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Admin Dashboard</h2>
+            <p class="text-muted">Welcome back, {{ current_user.username }}</p>
+        </div>
+        <div class="badge bg-primary p-2">
+            <i class="bi bi-speedometer2 me-2"></i>System Overview
+        </div>
+    </div>
+
     <!-- 统计卡片 -->
-    <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+    <div class="row row-cols-1 row-cols-lg-4 g-4 mb-5">
         <div class="col">
-            <div class="card bg-primary text-white">
+            <div class="card shadow border-start-3 border-primary">
                 <div class="card-body">
-                    <h5 class="card-title">Total Users</h5>
-                    <p class="card-text display-4">{{ stats.total_users }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-0">Total Users</h6>
+                            <h2 class="mb-0">{{ stats.total_users }}</h2>
+                        </div>
+                        <div class="icon-shape bg-primary text-white rounded-circle p-3">
+                            <i class="bi bi-people fs-4"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- 其他统计卡片类似 -->
+
+        <div class="col">
+            <div class="card shadow border-start-3 border-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-0">Active Polls</h6>
+                            <h2 class="mb-0">{{ stats.active_polls }}</h2>
+                        </div>
+                        <div class="icon-shape bg-success text-white rounded-circle p-3">
+                            <i class="bi bi-bar-chart fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow border-start-3 border-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-0">Ongoing Polls</h6>
+                            <h2 class="mb-0">{{ stats.ongoing_polls }}</h2>
+                        </div>
+                        <div class="icon-shape bg-info text-white rounded-circle p-3">
+                            <i class="bi bi-clock-history fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow border-start-3 border-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-0">Total Votes</h6>
+                            <h2 class="mb-0">{{ stats.total_votes }}</h2>
+                        </div>
+                        <div class="icon-shape bg-warning text-white rounded-circle p-3">
+                            <i class="bi bi-check2-circle fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 快速导航 -->
-    <div class="row g-3">
-        <div class="col-md-3">
-            <a href="{{ url_for('admin.manage_polls') }}" class="btn btn-secondary w-100">
-                Manage Polls
-            </a>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 hover-effect">
+                <div class="card-body text-center">
+                    <div class="icon-lg bg-primary text-white mb-3">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <h5 class="card-title">User Management</h5>
+                    <p class="text-muted small">Manage system users and permissions</p>
+                    <a href="{{ url_for('admin.manage_users') }}" class="stretched-link"></a>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-            <a href="{{ url_for('admin.manage_users') }}" class="btn btn-secondary w-100">
-                Manage Users
-            </a>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 hover-effect">
+                <div class="card-body text-center">
+                    <div class="icon-lg bg-success text-white mb-3">
+                        <i class="bi bi-megaphone"></i>
+                    </div>
+                    <h5 class="card-title">Poll Management</h5>
+                    <p class="text-muted small">Manage voting activities</p>
+                    <a href="{{ url_for('admin.manage_polls') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 hover-effect">
+                <div class="card-body text-center">
+                    <div class="icon-lg bg-info text-white mb-3">
+                        <i class="bi bi-clipboard-data"></i>
+                    </div>
+                    <h5 class="card-title">Vote Records</h5>
+                    <p class="text-muted small">View detailed voting records</p>
+                    <a href="{{ url_for('admin.manage_votes') }}" class="stretched-link"></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .hover-effect {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.125);
+    }
+    .hover-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    }
+    .icon-shape {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .icon-lg {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+    }
+    .border-start-3 {
+        border-left: 3px solid !important;
+    }
+</style>
 {% endblock %}

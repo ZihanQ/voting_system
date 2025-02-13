@@ -41,7 +41,9 @@
                 <div class="card-body">
                     <p class="card-text">{{ poll.description }}</p>
                     <p>Status:
-                        {% if poll.start_time <= now <= poll.end_time %}
+                    {% if poll.is_disabled %}
+        <span class="badge bg-secondary">Disabled</span>
+                        {% elif poll.start_time <= now <= poll.end_time %}
                         <span class="badge bg-success">Ongoing</span>
                         {% else %}
                         <span class="badge bg-danger">Ended</span>

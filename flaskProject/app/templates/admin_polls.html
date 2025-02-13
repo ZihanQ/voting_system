@@ -4,40 +4,61 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Manage Polls</h2>
-    
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Creator</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for poll in polls %}
-            <tr class="{% if poll.is_disabled %}table-secondary{% endif %}">
-                <td>{{ poll.title }}</td>
-                <td>{{ poll.creator.username }}</td>
-                <td>
-                    {% if poll.is_disabled %}
-                        <span class="badge bg-danger">Disabled</span>
-                    {% else %}
-                        <span class="badge bg-success">Active</span>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{{ url_for('poll.poll_results', poll_id=poll.id) }}" 
-                       class="btn btn-sm btn-info">Results</a>
-                    <a href="{{ url_for('admin.toggle_poll', poll_id=poll.id) }}" 
-                       class="btn btn-sm {% if poll.is_disabled %}btn-warning{% else %}btn-danger{% endif %}">
-                        {% if poll.is_disabled %}Enable{% else %}Disable{% endif %}
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Vote Management</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Title</th>
+                    <th>Creator</th>
+                    <th>Status</th>
+                    <th>Time Range</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for poll in polls %}
+                <tr class="{% if poll.is_disabled %}table-secondary{% endif %}">
+                    <td>{{ poll.title }}</td>
+                    <td>
+                        {% if poll.creator %}
+                            {{ poll.creator.username }}
+                        {% else %}
+                            [Deleted User]
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if poll.is_disabled %}
+                            <span class="badge bg-danger">Disabled</span>
+                        {% elif poll.end_time < now %}
+                            <span class="badge bg-secondary">Ended</span>
+                        {% else %}
+                            <span class="badge bg-success">Active</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ poll.start_time.strftime('%Y-%m-%d') }}
+                        ~
+                        {{ poll.end_time.strftime('%Y-%m-%d') }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('poll.poll_results', poll_id=poll.id) }}"
+                           class="btn btn-sm btn-info">View Results</a>
+                        <a href="{{ url_for('admin.toggle_poll', poll_id=poll.id) }}"
+                           class="btn btn-sm {% if poll.is_disabled %}btn-success{% else %}btn-warning{% endif %}">
+                           {% if poll.is_disabled %}Enable{% else %}Disable{% endif %}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

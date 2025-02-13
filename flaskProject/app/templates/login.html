@@ -21,16 +21,37 @@
         <button type="submit" class="btn btn-success w-100">Login</button>
     </form>
 </div>
-    <script>
-// 检查是否显示过期提示
+<!-- 添加弹窗处理 -->
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    {% if request.cookies.get('auto_show_expired_alert') %}
-        alert("会话已过期，请重新登录");
-        // 清除提示cookie
-        document.cookie = 'auto_show_expired_alert=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        // 跳转首页
-        window.location.href = "{{ url_for('main.index') }}";
-    {% endif %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                // 使用Bootstrap模态框替代alert
+                const alertModal = new bootstrap.Modal(document.getElementById('loginAlert'));
+                document.getElementById('alertMessage').innerText = "{{ message }}";
+                alertModal.show();
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 });
 </script>
+
+<!-- 添加弹窗组件 -->
+<div class="modal fade" id="loginAlert" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">登录错误</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="alertMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

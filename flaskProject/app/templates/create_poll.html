@@ -1,26 +1,79 @@
 {% extends 'layout.html' %}
 {% block title %}Create Poll{% endblock %}
 {% block content %}
-<h2>Create Poll</h2>
-<form action="/poll/" method="POST">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required><br>
+<div class="container mt-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 800px;">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="bi bi-plus-circle me-2"></i>创建新投票</h3>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('poll.create_poll') }}" method="POST">
+                <!-- 投票标题 -->
+                <div class="mb-4">
+                    <label for="title" class="form-label fs-5 text-primary">
+                        <i class="bi bi-pencil-square me-2"></i>投票标题
+                    </label>
+                    <input type="text" class="form-control form-control-lg"
+                           id="title" name="title" required
+                           placeholder="请输入投票主题">
+                </div>
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description"></textarea><br>
+                <!-- 投票描述 -->
+                <div class="mb-4">
+                    <label for="description" class="form-label fs-5 text-primary">
+                        <i class="bi bi-text-paragraph me-2"></i>详细描述
+                    </label>
+                    <textarea class="form-control" id="description" name="description"
+                              rows="3" placeholder="可选，添加投票的详细说明"></textarea>
+                </div>
 
-    <label for="options">Options (comma-separated):</label>
-    <input type="text" id="options" name="options" required><br>
+                <!-- 投票选项 -->
+                <div class="mb-4">
+                    <label for="options" class="form-label fs-5 text-primary">
+                        <i class="bi bi-list-check me-2"></i>投票选项
+                    </label>
+                    <input type="text" class="form-control"
+                           id="options" name="options" required
+                           placeholder="用英文逗号分隔选项，例如：选项1, 选项2, 选项3">
+                    <div class="form-text">至少需要两个不同的选项</div>
+                </div>
 
-    <label for="start_time">Start Time:</label>
-    <input type="datetime-local" id="start_time" name="start_time" required><br>
+                <!-- 时间设置 -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="start_time" class="form-label fs-5 text-primary">
+                            <i class="bi bi-clock me-2"></i>开始时间
+                        </label>
+                        <input type="datetime-local" class="form-control"
+                               id="start_time" name="start_time" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="end_time" class="form-label fs-5 text-primary">
+                            <i class="bi bi-clock-history me-2"></i>结束时间
+                        </label>
+                        <input type="datetime-local" class="form-control"
+                               id="end_time" name="end_time" required>
+                    </div>
+                </div>
 
-    <label for="end_time">End Time:</label>
-    <input type="datetime-local" id="end_time" name="end_time" required><br>
-<label>
-    <input type="checkbox" name="is_anonymous"> Allow Anonymous Voting
-</label><br>
-    <button type="submit">Create Poll</button>
-</form>
+                <!-- 匿名投票开关 -->
+                <div class="mb-4 form-check form-switch">
+                    <input class="form-check-input" type="checkbox"
+                           id="is_anonymous" name="is_anonymous">
+                    <label class="form-check-label fs-5 text-primary" for="is_anonymous">
+                        <i class="bi bi-incognito me-2"></i>启用匿名投票
+                    </label>
+                    <div class="form-text">启用后不会记录投票者身份信息</div>
+                </div>
 
+                <!-- 提交按钮 -->
+                <div class="d-grid gap-2 mt-5">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-check-circle me-2"></i>立即创建
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

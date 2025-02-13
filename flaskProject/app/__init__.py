@@ -2,7 +2,7 @@ import os
 from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, get_jwt_identity  # 新增导入
-
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -23,6 +23,7 @@ def create_app():
     )
 
     db.init_app(app)
+    # migrate = Migrate(app, db)  # 新增这行
     jwt.init_app(app)
 
     from app.models import User  # 新增模型导入

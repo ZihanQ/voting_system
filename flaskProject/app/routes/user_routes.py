@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for, session, make_response
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, session, make_response, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, decode_token
 from app.models import db, User, Poll
@@ -47,17 +47,17 @@ def login():
         response = make_response(render_template('login.html'))
         response.set_cookie('auto_show_expired_alert', '', max_age=0)
         return response
-    if request.is_json:
-        data = request.json
-    else:
-        data = request.form
 
-    username = data.get('username')
-    password = data.get('password')
+
+    # 统一处理表单提交
+    username = request.form.get('username')
+    password = request.form.get('password')
 
     user = User.query.filter_by(username=username).first()
+    # 验证失败处理
     if not user or not check_password_hash(user.password_hash, password):
-        return jsonify({"message": "Invalid credentials."}), 401
+        flash("用户名或密码错误", "error")  # 添加中文错误提示
+        return redirect(url_for('user.login'))  # 重定向回登录页
 
     # access_token = create_access_token(identity=user.id)
     access_token = create_access_token(identity=str(user.id))
@@ -133,7 +133,7 @@ def dashboard():
 @user_bp.route('/logout', methods=['GET', 'POST'])  # 同时支持两种方法
 def logout():
     # 创建响应对象（根据请求方法决定重定向路径）
-    redirect_url = url_for('user.home') if request.method == 'GET' else url_for('main.index')
+    redirect_url = url_for('user.home') if request.method == 'GET' else url_for('user.home')
     response = make_response(redirect(redirect_url))
 
     # 清除Cookie（保持原有逻辑）

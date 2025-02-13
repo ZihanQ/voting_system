@@ -55,3 +55,7 @@ class Vote(db.Model):
     poll_id = db.Column(db.Integer, db.ForeignKey('Polls.id'), nullable=False)
     option_id = db.Column(db.Integer, db.ForeignKey('PollOptions.id'), nullable=False)
     vote_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    # 新增关系定义
+    user = db.relationship('User', backref='votes')
+    poll = db.relationship('Poll', backref='votes')
+    option = db.relationship('PollOption', backref='votes')
