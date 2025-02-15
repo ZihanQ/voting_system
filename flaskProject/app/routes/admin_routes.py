@@ -10,7 +10,6 @@ from app.models import db, User, Poll, Vote, PollOption
 
 admin_bp = Blueprint('admin', __name__)
 
-
 # 管理员权限检查装饰器
 def admin_required(fn):
     @wraps(fn)

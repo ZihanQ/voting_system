@@ -1,0 +1,65 @@
+INSERT INTO PollOptions (poll_id,option_text) VALUES
+	 (1,'a'),
+	 (1,'b'),
+	 (2,'a'),
+	 (2,'b'),
+	 (3,'a'),
+	 (3,'b'),
+	 (4,'a'),
+	 (4,'b'),
+	 (5,'a'),
+	 (5,'b');
+INSERT INTO PollOptions (poll_id,option_text) VALUES
+	 (6,'a'),
+	 (6,'b'),
+	 (7,'苹果'),
+	 (7,'梨子'),
+	 (8,'足球'),
+	 (8,'篮球'),
+	 (9,'苹果'),
+	 (9,'梨子'),
+	 (9,'香蕉'),
+	 (10,'足球');
+INSERT INTO PollOptions (poll_id,option_text) VALUES
+	 (10,'篮球'),
+	 (10,'羽毛球'),
+	 (11,'封神'),
+	 (11,'哪吒'),
+	 (11,'唐探1900'),
+	 (11,'射雕英雄传'),
+	 (12,'a'),
+	 (12,'b'),
+	 (12,'c'),
+	 (12,'d');
+INSERT INTO PollOptions (poll_id,option_text) VALUES
+	 (12,'e'),
+	 (12,'f'),
+	 (13,'a'),
+	 (13,'b'),
+	 (13,'c'),
+	 (13,'d'),
+	 (14,'a'),
+	 (14,'b'),
+	 (14,'c'),
+	 (14,'d');
+INSERT INTO PollOptions (poll_id,option_text) VALUES
+	 (14,'e'),
+	 (14,'f'),
+	 (14,'g'),
+	 (15,'a'),
+	 (15,'b'),
+	 (15,'c'),
+	 (15,'d'),
+	 (16,'a'),
+	 (16,'b'),
+	 (16,'c');
+INSERT INTO PollOptions (poll_id,option_text) VALUES
+	 (16,'d'),
+	 (16,'e'),
+	 (17,'a'),
+	 (17,'b'),
+	 (17,'c'),
+	 (17,'d'),
+	 (17,'e'),
+	 (17,'f'),
+	 (17,'g');

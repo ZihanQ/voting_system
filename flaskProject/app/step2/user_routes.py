@@ -6,11 +6,6 @@ import re
 # 创建蓝图
 user_bp = Blueprint('user', __name__)
 
-# 首页路由
-@user_bp.route('/')
-def home():
-    return render_template('index.html')
-
 # 邮箱正则验证
 EMAIL_REGEX = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 
@@ -107,7 +102,7 @@ def get_profile():
     return render_template('profile.html',user=user)
 
 # 更新用户资料
-@user_bp.route('/user/profile', methods=['PUT','POST'])
+@user_bp.route('/user/profile', methods=['PUT', 'POST'])
 @jwt_required(locations=["cookies"])  # 指定从 cookies 中获取令牌
 def update_profile():
     user_id = get_jwt_identity()

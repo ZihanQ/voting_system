@@ -1,8 +1,6 @@
-import os
 from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, get_jwt_identity  # 新增导入
-from flask_migrate import Migrate
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -29,11 +27,14 @@ def create_app():
     from app.models import User  # 新增模型导入
 
     # 注册蓝图
-    from app.routes.user_routes import user_bp
+    from app.step1.user_routes import user1_bp
+    from app.step2.user_routes import user_bp
     from app.routes.poll_routes import poll_bp
     from app.routes.admin_routes import admin_bp
 
+
     app.register_blueprint(user_bp, url_prefix='/')
+    app.register_blueprint(user1_bp, url_prefix='/')
     app.register_blueprint(poll_bp, url_prefix='/poll')
     app.register_blueprint(admin_bp, url_prefix='/admin')
 
