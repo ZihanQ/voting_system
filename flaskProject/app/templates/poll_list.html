@@ -30,7 +30,7 @@
     </div>
 </form>
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Polls</h2>
+    <h2 class="text-center mb-4">投票</h2>
     <div class="row">
         {% for poll in polls %}
         <div class="col-md-4">
@@ -51,7 +51,7 @@
                     </p>
                     <p><strong>Start Time:</strong> {{ poll.start_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                     <p><strong>End Time:</strong> {{ poll.end_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                    <a href="/poll/{{ poll.id }}" class="btn btn-outline-primary w-100">View Poll</a>
+                    <a href="/poll/{{ poll.id }}" class="btn btn-outline-primary w-100">查看详情</a>
                 </div>
             </div>
         </div>

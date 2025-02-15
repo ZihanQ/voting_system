@@ -9,20 +9,20 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/dashboard">Poll System</a>
+        <a class="navbar-brand" href="/dashboard">个人主页</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">  <!-- 新增 me-auto 让左侧链接左对齐 -->
                 <li class="nav-item">
-                    <a class="nav-link" href="/poll/">Polls_list</a>
+                    <a class="nav-link" href="/poll/">投票列表</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/poll/create">Create Poll</a>
+                    <a class="nav-link" href="/poll/create">创建投票</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('poll.my_votes') }}">My Votes</a>
+                    <a class="nav-link" href="{{ url_for('poll.my_votes') }}">我的投票</a>
                 </li>
             </ul>
 
@@ -40,7 +40,7 @@
                     <a class="btn btn-danger btn-sm"
                        href="{{ url_for('user.logout') }}"
                        style="padding: 0.25rem 0.75rem;">  <!-- 自定义按钮尺寸 -->
-                        <i class="bi bi-box-arrow-right"></i> Logout
+                        <i class="bi bi-box-arrow-right"></i> 登出
                     </a>
                 </li>
             </ul>

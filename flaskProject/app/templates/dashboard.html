@@ -10,7 +10,7 @@
     </header>
 
     <section class="mb-5">
-        <h2>Your Polls</h2>
+        <h2>您的投票</h2>
         {% if polls %}
             <div class="list-group">
                 {% for poll in polls %}
@@ -30,13 +30,13 @@
         <h2>Actions</h2>
         <ul class="list-group">
             <li class="list-group-item">
-                <a href="/poll" class="btn btn-primary w-100">Poll</a>
+                <a href="/poll" class="btn btn-primary w-100">投票</a>
             </li>
             <li class="list-group-item">
-                <a href="/user/profile" class="btn btn-secondary w-100">View/Edit Profile</a>
+                <a href="/user/profile" class="btn btn-secondary w-100">个人信息</a>
             </li>
             <li class="list-group-item">
-                <a href="{{ url_for('user.logout') }}" class="btn btn-danger w-100">Logout</a>
+                <a href="{{ url_for('user.logout') }}" class="btn btn-danger w-100">登出</a>
             </li>
         </ul>
     </section>

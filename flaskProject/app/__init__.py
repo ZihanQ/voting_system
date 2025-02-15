@@ -52,7 +52,7 @@ def create_app():
     # JWT错误处理（修复路由引用）
     @jwt.expired_token_loader
     def handle_expired_token(jwt_header, jwt_payload):
-        response = redirect(url_for('user.login'))  # 原'auth.login'改为'user.login'
+        response = redirect(url_for('user.login'))
         response.set_cookie('auto_show_expired_alert', '1', max_age=2)
         return response
 

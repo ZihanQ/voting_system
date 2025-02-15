@@ -87,7 +87,7 @@ def manage_votes():
                            votes=votes,
                            polls=polls,
                            current_poll=poll_id)
-
+# 反转用户权限
 @admin_bp.route('/toggle_user/<int:user_id>')
 @admin_required
 def toggle_user(user_id):
@@ -96,6 +96,7 @@ def toggle_user(user_id):
     db.session.commit()
     flash(f"User {user.username} admin status updated", "success")
     return redirect(url_for('admin.manage_users'))
+
 
 @admin_bp.route('/toggle_poll/<int:poll_id>')
 @admin_required
