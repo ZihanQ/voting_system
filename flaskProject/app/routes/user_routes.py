@@ -1,8 +1,8 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for, session, make_response, flash
+from flask import flash,Blueprint, request, jsonify, render_template, redirect, url_for, session, make_response, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, decode_token
 from app.models import db, User, Poll
-
+import re
 # 创建蓝图
 user_bp = Blueprint('user', __name__)
 
@@ -11,35 +11,57 @@ user_bp = Blueprint('user', __name__)
 def home():
     return render_template('index.html')
 
-# 注册路由
+# 邮箱正则验证
+EMAIL_REGEX = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
         return render_template('register.html')
 
-    # 处理表单或 JSON 数据
-    if request.is_json:
-        data = request.json  # JSON 格式提交
-    else:
-        data = request.form  # 表单格式提交
+    # 获取数据（保留原始输入用于回显）
+    username = request.form.get('username', '').strip()
+    email = request.form.get('email', '').strip().lower()
+    password = request.form.get('password', '')
 
-    # 获取用户数据
-    username = data.get('username')
-    password = data.get('password')
-    email = data.get('email')
+    # 验证邮箱格式
+    if not re.fullmatch(EMAIL_REGEX, email):
+        flash("邮箱格式不正确，请使用类似 user@example.com 的格式", "danger")
+        return render_template('register.html',
+                             username=username,
+                             email=email)
 
-    # 检查用户名或邮箱是否已存在
-    if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
-        return jsonify({"message": "Username or email already exists."}), 400
+    # 检查用户名是否存在
+    if User.query.filter_by(username=username).first():
+        flash("用户名已被使用，请选择其他用户名", "danger")
+        return render_template('register.html',
+                             username=username,
+                             email=email)
 
-    # 创建新用户
-    hashed_password = generate_password_hash(password)
-    new_user = User(username=username, email=email, password_hash=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
-    # return jsonify({"message": "Registration successful!", "redirect": '/login'}), 201
-    return redirect(url_for('user.login'))
+    # 检查邮箱是否存在
+    if User.query.filter_by(email=email).first():
+        flash("该邮箱已被注册，请使用其他邮箱或尝试登录", "danger")
+        return render_template('register.html',
+                             username=username,
+                             email=email)
 
+    # 创建用户
+    try:
+        new_user = User(
+            username=username,
+            email=email,
+            password_hash=generate_password_hash(password)
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        flash("注册成功！请登录", "success")
+        return redirect(url_for('user.login'))
+    except Exception as e:
+        db.session.rollback()
+        flash("注册失败，请稍后重试", "danger")
+        return render_template('register.html',
+                             username=username,
+                             email=email)
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
